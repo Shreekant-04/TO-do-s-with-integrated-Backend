@@ -3,58 +3,69 @@
 import { useState } from "react";
 
 const Lists = () => {
+  const [view, setView] = useState("grid");
   return (
     <div
       className="w-full max-w-4xl mt-4 p-6"
       style={{ backgroundColor: "#f4faff", borderColor: "#219ebc" }}
     >
       <div className="flex justify-between mb-4">
-        <button
-          className="px-4 py-2 font-semibold text-white rounded-md"
-          style={{ backgroundColor: "#fb8500" }}
-        >
-          Sort By
-        </button>
+      <select name="Sort By"
+        className="px-4 py-2 font-semibold text-white rounded-md cursor-pointer"
+        style={{ backgroundColor: "#fb8500" }}
+>
+  <option value="default" disabled selected>Filter</option>
+  <option value="name">Name</option>
+  <option value="date">Date</option>
+  <option value="popularity">Importance</option>
+  <option value="rating">Completed</option>
+</select>
         <div className="flex space-x-2">
           <button
             className="px-4 py-2 font-semibold text-white rounded-md"
-            style={{ backgroundColor: "#8ecae6" }}
+            style={{ backgroundColor: view === "list" ? "#fb8500" : "#8ecae6" }}
+            onClick={() => setView("list")}
           >
             List
           </button>
           <button
             className="px-4 py-2 font-semibold text-white rounded-md"
-            style={{ backgroundColor: "#8ecae6" }}
+            style={{ backgroundColor: view === "grid" ? "#fb8500" : "#8ecae6" }}
+            onClick={() => setView("grid")}
           >
             Grid
           </button>
         </div>
       </div>
-      <div
-        className="grid grid-cols-3 gap-4 mb-4 p-2 rounded-md"
-        style={{ backgroundColor: "#e5f7ff" }}
-      >
-        <p className="font-bold" style={{ color: "#023047" }}>
-          Title
-        </p>
-        <p className="font-bold" style={{ color: "#023047" }}>
-          Due Date
-        </p>
-        <p className="font-bold" style={{ color: "#023047" }}>
-          Importance
-        </p>
-      </div>
+      {view === "grid" ? (
+        <div
+          className=" flex items-center justify-between  mb-4 p-2 rounded-md"
+          style={{ backgroundColor: "#e5f7ff" }}
+        >
+          <p className="font-bold text-center w-1/2" style={{ color: "#023047" }}>
+            Title
+          </p>
+          <p className="font-bold ml-12" style={{ color: "#023047" }}>
+            Due Date
+          </p>
+          <p className="font-bold" style={{ color: "#023047" }}>
+            Importance
+          </p>
+        </div>
+      ) : (
+        ""
+      )}
       <ul className="space-y-2">
-        <ListItems />
-        <ListItems />
-        <ListItems />
-        <ListItems />
+        <ListItems view={view} />
+        <ListItems view={view} />
+        <ListItems view={view} />
       </ul>
     </div>
   );
 };
 
-const ListItems = () => {
+// eslint-disable-next-line react/prop-types
+const ListItems = ({ view }) => {
   const [check, setCheck] = useState(false);
   const [imp, setImp] = useState(false);
   function handleChange(e) {
@@ -68,10 +79,10 @@ const ListItems = () => {
   );
   return (
     <li
-      className="grid grid-cols-3 gap-4 p-2 border-2 rounded-md shadow-sm"
+      className="flex items-center justify-between p-2 border rounded-md shadow-sm"
       style={{ backgroundColor: "#8ecae6", borderColor: "#219ebc" }}
     >
-      <p className="flex items-center">
+      <p className="flex items-center w-1/2">
         <input
           type="checkbox"
           onChange={handleChange}
@@ -79,13 +90,18 @@ const ListItems = () => {
         />
         <span
           className={
-            check ? "line-through ml-2 text-gray-500" : "ml-2 text-gray-700"
+            check ? "line-through ml-2 text-gray-500" : "ml-2 text-gray-700 "
           }
         >
           This is Task
         </span>
+        {view === "list" ? <p className=" text-gray-700 text-xs ml-4 mt-2">Due date</p> : ""}
       </p>
-      <p className="flex items-center text-gray-700">Date</p>
+      {view === "grid" ? (
+        <p className="flex items-center text-gray-700">Date</p>
+      ) : (
+        ""
+      )}
       <button
         className="flex items-center justify-end"
         onClick={() => setImp(!imp)}

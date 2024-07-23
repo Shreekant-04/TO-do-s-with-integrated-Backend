@@ -18,7 +18,7 @@ const NavBar = () => {
             type="text"
             id="search"
             className="px-2 py-1 outline-none"
-            placeholder="Search..."
+            placeholder="Not Working..."
           />
         </div>
         <button
